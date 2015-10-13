@@ -18,4 +18,7 @@ Light Globals::light;
 DrawData Globals::drawData;
 UpdateData Globals::updateData;
 
+Rasterizer Globals::rasterizer;
+
+
 

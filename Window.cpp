@@ -83,12 +83,17 @@ void Window::idleCallback()
 // Callback method called by GLUT when graphics window is resized by the user
 void Window::reshapeCallback(int w, int h)
 {
+    /* --- starter code ---
     width = w;                                                       //Set the window width
     height = h;                                                      //Set the window height
     glViewport(0, 0, w, h);                                          //Set new viewport size
     glMatrixMode(GL_PROJECTION);                                     //Set the OpenGL matrix mode to Projection
     glLoadIdentity();                                                //Clear the projection matrix by loading the identity
     gluPerspective(60.0, double(width)/(double)height, 1.0, 1000.0); //Set perspective projection viewing frustum
+     */
+    
+    Globals::rasterizer.reshape(w, h);
+    
 }
 
 //----------------------------------------------------------------------------

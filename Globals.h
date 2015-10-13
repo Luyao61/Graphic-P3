@@ -9,6 +9,7 @@
 #include "Sphere.h"
 #include "House.h"
 #include "OBJObject.h"
+#include "Rasterizer.h"
 
 class Globals
 {
@@ -27,6 +28,8 @@ public:
 	static OBJObject dragon;
 	static OBJObject bear;
 	static OBJObject bunny;
+    
+    static Rasterizer rasterizer;
 
     //Feel free to add more member variables as needed
         
