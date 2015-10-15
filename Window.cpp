@@ -318,9 +318,11 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
     }
     else if(key == 'e'){
         useRasterizer = !useRasterizer;
+
     }
-
-
+    else if (key == '-' || key == '+'){
+        Globals::rasterizer.keyboard(key, 0, 0);
+    }
 }
 
 

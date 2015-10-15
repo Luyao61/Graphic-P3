@@ -71,28 +71,23 @@ int indices[] = {
 
 House::House(void) : Drawable()
 {
-    this->vertices = new std::vector<Vector3*>();
-    this->normals = new std::vector<Vector3*>();
-    this->faces = new std::vector<Face*>();
-    this->colors = new std::vector<Vector3*>();
+
 
     //load vertexIndices into faces;
     //load vertices into vertices
-    for (int i = 0 ; i<60; ){
+    for (int i = 0 ; i<60; i+=3){
         Face* face = new Face;
         face->vertexIndices[0] = indices[i];
-        vertices->push_back(new Vector3(houseVertices[indices[i]*3], houseVertices[indices[i]*3+1], houseVertices[indices[i]*3+2]));
-        i++;
-        
-        face->vertexIndices[1] = indices[i];
-        vertices->push_back(new Vector3(houseVertices[indices[i]*3], houseVertices[indices[i]*3+1], houseVertices[indices[i]*3+2]));
-        i++;
-        
-        face->vertexIndices[2] = indices[i];
-        vertices->push_back(new Vector3(houseVertices[indices[i]*3], houseVertices[indices[i]*3+1], houseVertices[indices[i]*3+2]));
-        
+        face->vertexIndices[1] = indices[i+1];
+        face->vertexIndices[2] = indices[i+2];
+
         faces->push_back(face);
     }
+    
+    for (int i = 0; i<nVerts; i++) {
+        vertices->push_back(new Vector3(houseVertices[i*3],houseVertices[i*3+1],houseVertices[i*3+2]));
+    }
+    
     std::cout<< "HOUSE Done parsing." << std::endl;
 }
 

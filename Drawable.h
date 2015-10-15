@@ -28,6 +28,7 @@ public:
     std::vector<Face*>* faces;
     std::vector<Vector3*>* colors;
     Vector4 center;
+    int renderMode;
 
 
     

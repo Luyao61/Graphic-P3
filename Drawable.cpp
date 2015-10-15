@@ -5,6 +5,12 @@ Drawable::Drawable()
 {
     this->toWorld.identity();
     center = *new Vector4(0,0,0,1);
+    renderMode = 0;
+    
+    this->vertices = new std::vector<Vector3*>();
+    this->normals = new std::vector<Vector3*>();
+    this->faces = new std::vector<Face*>();
+    this->colors = new std::vector<Vector3*>();
 }
 
 Drawable::~Drawable()
