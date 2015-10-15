@@ -22,8 +22,8 @@
 int nVerts = 42;    // your vertex array needs to have this many entries
 int i = 0;
 
-// These are the x,y,z coordinates of the vertices of the triangles
-float vertices[] = {
+// These are the x,y,z coordinates of the houseVertices of the triangles
+float houseVertices[] = {
     -4,-4,4, 4,-4,4, 4,4,4, -4,4,4,     // front face
     -4,-4,-4, -4,-4,4, -4,4,4, -4,4,-4, // left face
     4,-4,-4,-4,-4,-4, -4,4,-4, 4,4,-4,  // back face
@@ -37,8 +37,8 @@ float vertices[] = {
     -4,4,4, 0,8,4, 0,8,-4, -4,4,-4,             // right slope
     4,4,-4, -4,4,-4, 0,8,-4};                   // rear attic wall
 
-// These are the RGB colors corresponding to the vertices, in the same order
-float colors[] = {
+// These are the RGB househouseColors corresponding to the houseVertices, in the same order
+float househouseColors[] = {
     1,0,0, 1,0,0, 1,0,0, 1,0,0,  // front is red
     0,1,0, 0,1,0, 0,1,0, 0,1,0,  // left is green
     1,0,0, 1,0,0, 1,0,0, 1,0,0,  // back is red
@@ -71,6 +71,29 @@ int indices[] = {
 
 House::House(void) : Drawable()
 {
+    this->vertices = new std::vector<Vector3*>();
+    this->normals = new std::vector<Vector3*>();
+    this->faces = new std::vector<Face*>();
+    this->colors = new std::vector<Vector3*>();
+
+    //load vertexIndices into faces;
+    //load vertices into vertices
+    for (int i = 0 ; i<60; ){
+        Face* face = new Face;
+        face->vertexIndices[0] = indices[i];
+        vertices->push_back(new Vector3(houseVertices[indices[i]*3], houseVertices[indices[i]*3+1], houseVertices[indices[i]*3+2]));
+        i++;
+        
+        face->vertexIndices[1] = indices[i];
+        vertices->push_back(new Vector3(houseVertices[indices[i]*3], houseVertices[indices[i]*3+1], houseVertices[indices[i]*3+2]));
+        i++;
+        
+        face->vertexIndices[2] = indices[i];
+        vertices->push_back(new Vector3(houseVertices[indices[i]*3], houseVertices[indices[i]*3+1], houseVertices[indices[i]*3+2]));
+        
+        faces->push_back(face);
+    }
+    std::cout<< "HOUSE Done parsing." << std::endl;
 }
 
 House::~House(void)
@@ -91,145 +114,145 @@ void House::draw(DrawData& data)
 
     glBegin(GL_QUADS);
     
-    glColor3f(colors[0], colors[1], colors[2]);
-    glVertex3f(vertices[0], vertices[1], vertices[2]);
+    glColor3f(househouseColors[0], househouseColors[1], househouseColors[2]);
+    glVertex3f(houseVertices[0], houseVertices[1], houseVertices[2]);
     
-    glColor3f(colors[3], colors[4], colors[5]);
-    glVertex3f(vertices[3], vertices[4], vertices[5]);
+    glColor3f(househouseColors[3], househouseColors[4], househouseColors[5]);
+    glVertex3f(houseVertices[3], houseVertices[4], houseVertices[5]);
     
-    glColor3f(colors[6], colors[7], colors[8]);
-    glVertex3f(vertices[6], vertices[7], vertices[8]);
+    glColor3f(househouseColors[6], househouseColors[7], househouseColors[8]);
+    glVertex3f(houseVertices[6], houseVertices[7], houseVertices[8]);
     
-    glColor3f(colors[9], colors[10], colors[11]);
-    glVertex3f(vertices[9], vertices[10], vertices[11]);
+    glColor3f(househouseColors[9], househouseColors[10], househouseColors[11]);
+    glVertex3f(houseVertices[9], houseVertices[10], houseVertices[11]);
     
-    glColor3f(colors[12], colors[13], colors[14]);
-    glVertex3f(vertices[12], vertices[13], vertices[14]);
+    glColor3f(househouseColors[12], househouseColors[13], househouseColors[14]);
+    glVertex3f(houseVertices[12], houseVertices[13], houseVertices[14]);
     
-    glColor3f(colors[15], colors[16], colors[17]);
-    glVertex3f(vertices[15], vertices[16], vertices[17]);
+    glColor3f(househouseColors[15], househouseColors[16], househouseColors[17]);
+    glVertex3f(houseVertices[15], houseVertices[16], houseVertices[17]);
     
-    glColor3f(colors[18], colors[19], colors[20]);
-    glVertex3f(vertices[18], vertices[19], vertices[20]);
+    glColor3f(househouseColors[18], househouseColors[19], househouseColors[20]);
+    glVertex3f(houseVertices[18], houseVertices[19], houseVertices[20]);
     
-    glColor3f(colors[21], colors[22], colors[23]);
-    glVertex3f(vertices[21], vertices[22], vertices[23]);
+    glColor3f(househouseColors[21], househouseColors[22], househouseColors[23]);
+    glVertex3f(houseVertices[21], houseVertices[22], houseVertices[23]);
     
-    glColor3f(colors[24], colors[25], colors[26]);
-    glVertex3f(vertices[24], vertices[25], vertices[26]);
+    glColor3f(househouseColors[24], househouseColors[25], househouseColors[26]);
+    glVertex3f(houseVertices[24], houseVertices[25], houseVertices[26]);
     
-    glColor3f(colors[27], colors[28], colors[29]);
-    glVertex3f(vertices[27], vertices[28], vertices[29]);
+    glColor3f(househouseColors[27], househouseColors[28], househouseColors[29]);
+    glVertex3f(houseVertices[27], houseVertices[28], houseVertices[29]);
     
-    glColor3f(colors[30], colors[31], colors[32]);
-    glVertex3f(vertices[30], vertices[31], vertices[32]);
+    glColor3f(househouseColors[30], househouseColors[31], househouseColors[32]);
+    glVertex3f(houseVertices[30], houseVertices[31], houseVertices[32]);
     
-    glColor3f(colors[33], colors[34], colors[35]);
-    glVertex3f(vertices[33], vertices[34], vertices[35]);
+    glColor3f(househouseColors[33], househouseColors[34], househouseColors[35]);
+    glVertex3f(houseVertices[33], houseVertices[34], houseVertices[35]);
     
-    glColor3f(colors[36], colors[37], colors[38]);
-    glVertex3f(vertices[36], vertices[37], vertices[38]);
+    glColor3f(househouseColors[36], househouseColors[37], househouseColors[38]);
+    glVertex3f(houseVertices[36], houseVertices[37], houseVertices[38]);
     
-    glColor3f(colors[39], colors[40], colors[41]);
-    glVertex3f(vertices[39], vertices[40], vertices[41]);
+    glColor3f(househouseColors[39], househouseColors[40], househouseColors[41]);
+    glVertex3f(houseVertices[39], houseVertices[40], houseVertices[41]);
     
-    glColor3f(colors[42], colors[43], colors[44]);
-    glVertex3f(vertices[42], vertices[43], vertices[44]);
+    glColor3f(househouseColors[42], househouseColors[43], househouseColors[44]);
+    glVertex3f(houseVertices[42], houseVertices[43], houseVertices[44]);
     
-    glColor3f(colors[45], colors[46], colors[47]);
-    glVertex3f(vertices[45], vertices[46], vertices[47]);
+    glColor3f(househouseColors[45], househouseColors[46], househouseColors[47]);
+    glVertex3f(houseVertices[45], houseVertices[46], houseVertices[47]);
     
-    glColor3f(colors[48], colors[49], colors[50]);
-    glVertex3f(vertices[48], vertices[49], vertices[50]);
+    glColor3f(househouseColors[48], househouseColors[49], househouseColors[50]);
+    glVertex3f(houseVertices[48], houseVertices[49], houseVertices[50]);
     
-    glColor3f(colors[51], colors[52], colors[53]);
-    glVertex3f(vertices[51], vertices[52], vertices[53]);
+    glColor3f(househouseColors[51], househouseColors[52], househouseColors[53]);
+    glVertex3f(houseVertices[51], houseVertices[52], houseVertices[53]);
     
-    glColor3f(colors[54], colors[55], colors[56]);
-    glVertex3f(vertices[54], vertices[55], vertices[56]);
+    glColor3f(househouseColors[54], househouseColors[55], househouseColors[56]);
+    glVertex3f(houseVertices[54], houseVertices[55], houseVertices[56]);
     
-    glColor3f(colors[57], colors[58], colors[59]);
-    glVertex3f(vertices[57], vertices[58], vertices[59]);
+    glColor3f(househouseColors[57], househouseColors[58], househouseColors[59]);
+    glVertex3f(houseVertices[57], houseVertices[58], houseVertices[59]);
 
-    glColor3f(colors[60], colors[61], colors[62]);
-    glVertex3f(vertices[60], vertices[61], vertices[62]);
+    glColor3f(househouseColors[60], househouseColors[61], househouseColors[62]);
+    glVertex3f(houseVertices[60], houseVertices[61], houseVertices[62]);
     
-    glColor3f(colors[63], colors[64], colors[65]);
-    glVertex3f(vertices[63], vertices[64], vertices[65]);
+    glColor3f(househouseColors[63], househouseColors[64], househouseColors[65]);
+    glVertex3f(houseVertices[63], houseVertices[64], houseVertices[65]);
     
-    glColor3f(colors[66], colors[67], colors[68]);
-    glVertex3f(vertices[66], vertices[67], vertices[68]);
+    glColor3f(househouseColors[66], househouseColors[67], househouseColors[68]);
+    glVertex3f(houseVertices[66], houseVertices[67], houseVertices[68]);
     
-    glColor3f(colors[69], colors[70], colors[71]);
-    glVertex3f(vertices[69], vertices[70], vertices[71]);
+    glColor3f(househouseColors[69], househouseColors[70], househouseColors[71]);
+    glVertex3f(houseVertices[69], houseVertices[70], houseVertices[71]);
 
     glEnd();
 
 	glBegin(GL_QUADS);
-	glColor3f(colors[72], colors[73], colors[74]);
-	glVertex3f(vertices[72], vertices[73], vertices[74]);
+	glColor3f(househouseColors[72], househouseColors[73], househouseColors[74]);
+	glVertex3f(houseVertices[72], houseVertices[73], houseVertices[74]);
 
-	glColor3f(colors[75], colors[76], colors[77]);
-	glVertex3f(vertices[75], vertices[76], vertices[77]);
+	glColor3f(househouseColors[75], househouseColors[76], househouseColors[77]);
+	glVertex3f(houseVertices[75], houseVertices[76], houseVertices[77]);
 
-	glColor3f(colors[78], colors[79], colors[80]);
-	glVertex3f(vertices[78], vertices[79], vertices[80]);
+	glColor3f(househouseColors[78], househouseColors[79], househouseColors[80]);
+	glVertex3f(houseVertices[78], houseVertices[79], houseVertices[80]);
 
-	glColor3f(colors[81], colors[82], colors[83]);
-	glVertex3f(vertices[81], vertices[82], vertices[83]);
+	glColor3f(househouseColors[81], househouseColors[82], househouseColors[83]);
+	glVertex3f(houseVertices[81], houseVertices[82], houseVertices[83]);
 
 	glEnd();
 
 	glBegin(GL_POLYGON);
-	glColor3f(colors[84], colors[85], colors[86]);
-	glVertex3f(vertices[84], vertices[85], vertices[86]);
+	glColor3f(househouseColors[84], househouseColors[85], househouseColors[86]);
+	glVertex3f(houseVertices[84], houseVertices[85], houseVertices[86]);
 
-	glColor3f(colors[87], colors[88], colors[89]);
-	glVertex3f(vertices[87], vertices[88], vertices[89]);
+	glColor3f(househouseColors[87], househouseColors[88], househouseColors[89]);
+	glVertex3f(houseVertices[87], houseVertices[88], houseVertices[89]);
 
-	glColor3f(colors[90], colors[91], colors[92]);
-	glVertex3f(vertices[90], vertices[91], vertices[92]);
+	glColor3f(househouseColors[90], househouseColors[91], househouseColors[92]);
+	glVertex3f(houseVertices[90], houseVertices[91], houseVertices[92]);
 	glEnd();
     
     
 	glBegin(GL_QUADS);
-	glColor3f(colors[93], colors[94], colors[95]);
-	glVertex3f(vertices[93], vertices[94], vertices[95]);
+	glColor3f(househouseColors[93], househouseColors[94], househouseColors[95]);
+	glVertex3f(houseVertices[93], houseVertices[94], houseVertices[95]);
 
-	glColor3f(colors[96], colors[97], colors[98]);
-	glVertex3f(vertices[96], vertices[97], vertices[98]);
+	glColor3f(househouseColors[96], househouseColors[97], househouseColors[98]);
+	glVertex3f(houseVertices[96], houseVertices[97], houseVertices[98]);
 
-	glColor3f(colors[99], colors[100], colors[101]);
-	glVertex3f(vertices[99], vertices[100], vertices[101]);
+	glColor3f(househouseColors[99], househouseColors[100], househouseColors[101]);
+	glVertex3f(houseVertices[99], houseVertices[100], houseVertices[101]);
 
-	glColor3f(colors[102], colors[103], colors[104]);
-	glVertex3f(vertices[102], vertices[103], vertices[104]);
+	glColor3f(househouseColors[102], househouseColors[103], househouseColors[104]);
+	glVertex3f(houseVertices[102], houseVertices[103], houseVertices[104]);
 
 	glEnd();	glBegin(GL_QUADS);
-	glColor3f(colors[105], colors[106], colors[107]);
-	glVertex3f(vertices[105], vertices[106], vertices[107]);
+	glColor3f(househouseColors[105], househouseColors[106], househouseColors[107]);
+	glVertex3f(houseVertices[105], houseVertices[106], houseVertices[107]);
 
-	glColor3f(colors[108], colors[109], colors[110]);
-	glVertex3f(vertices[108], vertices[109], vertices[110]);
+	glColor3f(househouseColors[108], househouseColors[109], househouseColors[110]);
+	glVertex3f(houseVertices[108], houseVertices[109], houseVertices[110]);
 
-	glColor3f(colors[111], colors[112], colors[113]);
-	glVertex3f(vertices[111], vertices[112], vertices[113]);
+	glColor3f(househouseColors[111], househouseColors[112], househouseColors[113]);
+	glVertex3f(houseVertices[111], houseVertices[112], houseVertices[113]);
 
-	glColor3f(colors[114], colors[115], colors[116]);
-	glVertex3f(vertices[114], vertices[115], vertices[116]);
+	glColor3f(househouseColors[114], househouseColors[115], househouseColors[116]);
+	glVertex3f(houseVertices[114], houseVertices[115], houseVertices[116]);
 
 	glEnd();
 
 
 	glBegin(GL_POLYGON);
-	glColor3f(colors[117], colors[118], colors[119]);
-	glVertex3f(vertices[117], vertices[118], vertices[119]);
+	glColor3f(househouseColors[117], househouseColors[118], househouseColors[119]);
+	glVertex3f(houseVertices[117], houseVertices[118], houseVertices[119]);
 
-	glColor3f(colors[120], colors[121], colors[122]);
-	glVertex3f(vertices[120], vertices[121], vertices[122]);
+	glColor3f(househouseColors[120], househouseColors[121], househouseColors[122]);
+	glVertex3f(houseVertices[120], houseVertices[121], houseVertices[122]);
 
-	glColor3f(colors[123], colors[124], colors[125]);
-	glVertex3f(vertices[123], vertices[124], vertices[125]);
+	glColor3f(househouseColors[123], househouseColors[124], househouseColors[125]);
+	glVertex3f(houseVertices[123], houseVertices[124], houseVertices[125]);
 	glEnd();
     
     glPopMatrix();

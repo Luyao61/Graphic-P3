@@ -22,6 +22,11 @@ bool drawCube = false;
 bool drawBear = false;
 bool drawBunny = false;
 bool drawDragon = false;
+bool useRasterizer = false;
+int frame=0;
+int t; //time
+int timebase=0;
+
 
 std::vector<OBJObject*>* allOBJ;
 
@@ -83,14 +88,13 @@ void Window::idleCallback()
 // Callback method called by GLUT when graphics window is resized by the user
 void Window::reshapeCallback(int w, int h)
 {
-    /* --- starter code ---
+    // --- starter code ---
     width = w;                                                       //Set the window width
     height = h;                                                      //Set the window height
     glViewport(0, 0, w, h);                                          //Set new viewport size
     glMatrixMode(GL_PROJECTION);                                     //Set the OpenGL matrix mode to Projection
     glLoadIdentity();                                                //Clear the projection matrix by loading the identity
     gluPerspective(60.0, double(width)/(double)height, 1.0, 1000.0); //Set perspective projection viewing frustum
-     */
     
     Globals::rasterizer.reshape(w, h);
     
@@ -100,6 +104,17 @@ void Window::reshapeCallback(int w, int h)
 // Callback method called by GLUT when window readraw is necessary or when glutPostRedisplay() was called.
 void Window::displayCallback()
 {
+    
+    
+    frame++;
+    t=glutGet(GLUT_ELAPSED_TIME);
+    if (t - timebase > 1000) {
+        printf("FPS:%4.2f\n",
+                frame*1000.0/(t-timebase));
+        timebase = t;
+        frame = 0;
+    }
+    
     //Clear color and depth buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -121,23 +136,31 @@ void Window::displayCallback()
     //(if we didn't the light would move with the camera, why is that?)
     Globals::light.bind(0);
     
-    //Draw the cube!
-    if (drawCube == true) {
-        Globals::cube.draw(Globals::drawData);
-    }
-    
-    //Draw the sphere!
-    if (drawSphere == true) {
-        Globals::sphere.draw(Globals::drawData);
-    }
-    
-    if (drawHouse == true) {
-        Globals::house.draw(Globals::drawData);
-    }
+    if (useRasterizer) {
+        Globals::rasterizer.display();
 
-    for (int i =0; i<allOBJ->size(); i++) {
-        allOBJ->at(i)->draw(Globals::drawData);
+    }else{
+        //Draw the cube!
+        if (drawCube == true) {
+            Globals::cube.draw(Globals::drawData);
+        }
+    
+        //Draw the sphere!
+        if (drawSphere == true) {
+            Globals::sphere.draw(Globals::drawData);
+        }
+    
+        if (drawHouse == true) {
+            Globals::house.draw(Globals::drawData);
+        }
+
+        for (int i =0; i<allOBJ->size(); i++) {
+            allOBJ->at(i)->draw(Globals::drawData);
+        }
     }
+    
+    
+     
 
     
     //Pop off the changes we made to the matrix stack this frame
@@ -166,6 +189,9 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         if (drawCube == true) {
             Globals::cube.movex();
         }
+        else if(useRasterizer == true){
+            Globals::rasterizer.movex();
+        }
         else {
             allOBJ->back()->movex();
         }
@@ -174,6 +200,10 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         if (drawCube == true) {
             Globals::cube.moveX();
         }
+        else if(useRasterizer == true){
+            Globals::rasterizer.moveX();
+        }
+
         else {
             allOBJ->back()->moveX();
         }
@@ -181,6 +211,9 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
     else if(key == 'y'){
         if (drawCube == true) {
             Globals::cube.movey();
+        }
+        else if(useRasterizer == true){
+            Globals::rasterizer.movey();
         }
         else {
             allOBJ->back()->movey();
@@ -190,6 +223,9 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         if (drawCube == true) {
             Globals::cube.moveY();
         }
+        else if(useRasterizer == true){
+            Globals::rasterizer.moveY();
+        }
         else {
             allOBJ->back()->moveY();
         }
@@ -197,6 +233,9 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
     else if(key == 'z'){
         if (drawCube == true) {
             Globals::cube.movez();
+        }
+        else if(useRasterizer == true){
+            Globals::rasterizer.movez();
         }
         else {
             allOBJ->back()->movez();
@@ -206,6 +245,9 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         if (drawCube == true) {
             Globals::cube.moveZ();
         }
+        else if(useRasterizer == true){
+            Globals::rasterizer.moveZ();
+        }
         else {
             allOBJ->back()->moveZ();
         }
@@ -213,6 +255,9 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
     else if(key == 'o'){
         if (drawCube == true) {
             Globals::cube.orbit(orbitAngle);
+        }
+        else if(useRasterizer == true){
+            Globals::rasterizer.orbit(orbitAngle);
         }
         else {
             allOBJ->back()->orbit(orbitAngle);
@@ -222,6 +267,9 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         if (drawCube == true) {
             Globals::cube.orbit(-orbitAngle);
         }
+        else if(useRasterizer == true){
+            Globals::rasterizer.orbit(-orbitAngle);
+        }
         else {
             allOBJ->back()->orbit(-orbitAngle);
         }
@@ -230,6 +278,10 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         if (drawCube == true) {
             Globals::cube.scale(false);
         }
+        else if(useRasterizer == true){
+            Globals::rasterizer.scale(false);
+        }
+
         else {
             allOBJ->back()->scale(false);
         }
@@ -237,6 +289,9 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
     else if(key == 'S'){
         if (drawCube == true) {
             Globals::cube.scale(true);
+        }
+        else if(useRasterizer == true){
+            Globals::rasterizer.scale(true);
         }
         else {
             allOBJ->back()->scale(true);
@@ -251,6 +306,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         Globals::dragon.reset();
         Globals::bear.reset();
         Globals::bunny.reset();
+        Globals::rasterizer.reset();
     }
     else if (key == 'b'){
         drawSphere = true;
@@ -259,6 +315,9 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
 		drawBear = drawBunny = drawDragon = false;
 
         Globals::sphere.reset();
+    }
+    else if(key == 'e'){
+        useRasterizer = !useRasterizer;
     }
 
 
@@ -290,6 +349,7 @@ void Window::processSpecialKeys(int key, int x, int y) {
 		up.set(0, 1, 0);
 
 		Globals::camera.set(e, d, up);
+            Globals::rasterizer.toDraw = &Globals::house;
             
             allOBJ->clear();
 
@@ -305,6 +365,8 @@ void Window::processSpecialKeys(int key, int x, int y) {
         up.set(0, 1, 0.5);
             
         Globals::camera.set(e, d, up);
+            Globals::rasterizer.toDraw = &Globals::house;
+
             
             allOBJ->clear();
 
@@ -317,6 +379,8 @@ void Window::processSpecialKeys(int key, int x, int y) {
 
             Globals::camera.reset();
             
+            Globals::rasterizer.toDraw = new OBJObject(Globals::bunny);
+            
             allOBJ->push_back(new OBJObject(Globals::bunny));
             break;
     case GLUT_KEY_F5:
@@ -327,6 +391,8 @@ void Window::processSpecialKeys(int key, int x, int y) {
 
             
             Globals::camera.reset();
+            Globals::rasterizer.toDraw = new OBJObject(Globals::bear);
+
             
             allOBJ->push_back(new OBJObject(Globals::bear));
             break;
@@ -337,6 +403,7 @@ void Window::processSpecialKeys(int key, int x, int y) {
             drawSphere = false;
 
             Globals::camera.reset();
+            Globals::rasterizer.toDraw = new OBJObject(Globals::dragon);
             
             allOBJ->push_back(new OBJObject(Globals::dragon));
             break;

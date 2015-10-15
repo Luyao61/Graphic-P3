@@ -4,6 +4,7 @@
 Drawable::Drawable()
 {
     this->toWorld.identity();
+    center = *new Vector4(0,0,0,1);
 }
 
 Drawable::~Drawable()
@@ -19,4 +20,99 @@ void Drawable::draw(DrawData& data)
 void Drawable::update(UpdateData& data)
 {
     std::cout << "Warning: update() is not implemented" << std::endl;
+}
+
+
+
+//self Centered!;
+void Drawable::spin(float radians)
+{
+    Matrix4 rotation;
+    rotation.makeRotateY(radians);
+    
+    toWorld = toWorld  * rotation;
+}
+void Drawable::orbit(float radians){
+    Matrix4 rotation;
+    rotation.makeRotateZ(radians);
+    
+    toWorld = rotation  * toWorld;
+    
+    center = rotation * center;
+    center.print("Drawable New Position");
+    
+}
+
+void Drawable::moveX(){
+    Matrix4 move;
+    move = move.makeTranslate(0.5, 0, 0);
+    
+    toWorld = move * toWorld;
+    
+    center = move * center;
+    center.print("Drawable New Position");
+    
+}
+void Drawable::movex(){
+    Matrix4 move;
+    move = move.makeTranslate(-0.5, 0, 0);
+    
+    toWorld = move * toWorld;
+    center = move * center;
+    center.print("Drawable New Position");
+    
+}
+
+void Drawable::moveY(){
+    Matrix4 move;
+    move = move.makeTranslate(0, 0.5, 0);
+    
+    toWorld = move * toWorld;
+    center = move * center;
+    center.print("Drawable New Position");
+    
+}
+void Drawable::movey(){
+    Matrix4 move;
+    move = move.makeTranslate(0, -0.5, 0);
+    
+    toWorld = move * toWorld;
+    center = move * center;
+    center.print("Drawable New Position");
+}
+void Drawable::moveZ(){
+    Matrix4 move;
+    move = move.makeTranslate(0, 0, 0.5);
+    
+    toWorld = move * toWorld;
+    center = move * center;
+    center.print("Drawable New Position");
+    
+}
+void Drawable::movez(){
+    Matrix4 move;
+    move = move.makeTranslate(0, 0, -0.5);
+    
+    toWorld = move * toWorld;
+    center = move * center;
+    center.print("Drawable New Position");
+}
+
+
+void Drawable::scale(bool x){
+    Matrix4 scale;
+    if (x) {
+        scale.makeScale(1.01);
+    }
+    else{
+        scale.makeScale(0.99);
+    }
+    toWorld = toWorld * scale;
+    center.print("Drawable New Position");
+}
+
+void Drawable::reset(){
+    toWorld.identity();
+    center.set(0, 0, 0, 1);
+    center.print("Drawable New Position");
 }

@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Matrix4.h"
 #include "DrawData.h"
+#include "Vector4.h"
 #include "UpdateData.h"
 #include "Material.h"
 #include <float.h>
@@ -11,10 +12,24 @@
 #include <vector>
 
 
+struct Face
+{
+    int vertexIndices[3];
+    int normalIndices[3];
+    //Add more members as necessary
+};
 class Drawable
 {
     
 public:
+    
+    std::vector<Vector3*>* vertices;
+    std::vector<Vector3*>* normals;
+    std::vector<Face*>* faces;
+    std::vector<Vector3*>* colors;
+    Vector4 center;
+
+
     
     Matrix4 toWorld;
     Material material;
@@ -24,6 +39,19 @@ public:
     
     virtual void draw(DrawData&);
     virtual void update(UpdateData&);
+    
+    void moveX();
+    void movex();
+    void movey();
+    void moveY();
+    void movez();
+    void moveZ();
+    void scale(bool);
+    void orbit(float);
+    
+    void spin(float);
+    void reset();
+
     
 };
 

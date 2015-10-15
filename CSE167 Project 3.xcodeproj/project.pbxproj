@@ -50,8 +50,8 @@
 		097498E11BC4E11600742D07 /* bear.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bear.obj; sourceTree = SOURCE_ROOT; };
 		097498E21BC4E11600742D07 /* bunny.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bunny.obj; sourceTree = SOURCE_ROOT; };
 		097498E31BC4E11600742D07 /* dragon.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dragon.obj; sourceTree = SOURCE_ROOT; };
+		09C97D5E1BCFFA6B00521BB6 /* House.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = House.h; sourceTree = SOURCE_ROOT; };
 		09E2CCBD1BC448850013579B /* House.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = House.cpp; sourceTree = SOURCE_ROOT; };
-		09E2CCBE1BC448850013579B /* House.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = House.hpp; sourceTree = SOURCE_ROOT; };
 		D40AFA7E1AD1E2E7008D61CC /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = SOURCE_ROOT; };
 		D40AFA7F1AD1E2E7008D61CC /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = SOURCE_ROOT; };
 		D42FFC1E1AAFC90E006F8E9C /* CSE167 Project 3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "CSE167 Project 3"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -171,7 +171,7 @@
 				D4FEE23D1AC895C6006CF92D /* MathTestBench.cpp */,
 				D4FEE23E1AC895C6006CF92D /* MathTestBench.h */,
 				09E2CCBD1BC448850013579B /* House.cpp */,
-				09E2CCBE1BC448850013579B /* House.hpp */,
+				09C97D5E1BCFFA6B00521BB6 /* House.h */,
 			);
 			path = "CSE167 Spring 2015 Starter Code";
 			sourceTree = "<group>";

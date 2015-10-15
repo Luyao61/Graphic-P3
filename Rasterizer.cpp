@@ -12,6 +12,8 @@
 
 #include <iostream>
 #include "Rasterizer.h"
+#include "Globals.h"
+
 #include <math.h>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -24,26 +26,13 @@ static float* pixels = new float[window_width * window_height * 3];
 static float FOV = 60;
 static float near = 1.0;
 static float far = 1000.0;
+Drawable *toDraw;
 
 using namespace std;
 
-struct Color    // generic color
-{
-    float r,g,b;
-};
-
-Rasterizer::Rasterizer(){
-    double aspect = window_width/window_height;
-    
-    d.set(window_width/2, 0, 0, 0,
-          0, window_height/2, 0, 0,
-          0, 0, 0.5, 0,
-          window_width/2, window_height/2, 0.5, 1);
-    
-    p.set(1/(aspect*tan(FOV/2)), 0, 0, 0,
-          0, 1/tan(FOV/2), 0, 0,
-          0, 0, (near+far)/(near-far), -1,
-          0, 0, 2*near*far/(near-far), 0);
+Rasterizer::Rasterizer() : Drawable(){
+    d.makeViewport(0, window_width, 0, window_height);
+    p.makePerspectiveProjection(FOV, window_width, window_height, near, far);
 }
 
 Rasterizer::~Rasterizer(){
@@ -58,12 +47,12 @@ void Rasterizer::loadData()
 // Clear frame buffer
 void Rasterizer::clearBuffer()
 {
-    Color clearColor = {0.0, 0.0, 0.0};   // clear color: black
+    Color clearColor = *new Color(0,0,0);   // clear color: black
     for (int i=0; i<window_width*window_height; ++i)
     {
-        pixels[i*3]   = clearColor.r;
-        pixels[i*3+1] = clearColor.g;
-        pixels[i*3+2] = clearColor.b;
+        pixels[i*3]   = *clearColor.ptr();
+        pixels[i*3+1] = *(clearColor.ptr()+1);
+        pixels[i*3+2] = *(clearColor.ptr()+2);
     }
 }
 
@@ -71,10 +60,28 @@ void Rasterizer::clearBuffer()
 void Rasterizer::drawPoint(int x, int y, float r, float g, float b)
 {
     int offset = y*window_width*3 + x*3;
-    pixels[offset]   = r;
-    pixels[offset+1] = g;
-    pixels[offset+2] = b;
+    if ( x>=0 && x<= window_width && y>=0 && y <= window_height) {
+        pixels[offset]   = r;
+        pixels[offset+1] = g;
+        pixels[offset+2] = b;
+    }
 }
+
+Vector4 Rasterizer:: rasterizeVertex(Vector4 point){
+        point = this->toWorld * point;
+        
+        point = Globals::camera.getInverseMatrix() * point;
+        
+        point = p * point;
+        
+        point = point.dehomogenize();
+        
+        point = d * point;
+
+    
+    return point;
+}
+
 
 void Rasterizer::rasterizeTriangle()
 {
@@ -87,10 +94,17 @@ void Rasterizer::rasterize()
     // It should go over the data model and call rasterizeTriangle for every triangle in it
     
     // example: draw diagonal line:
-    for (int i=0; i<min(window_width,window_height); ++i)
-    {
-        drawPoint(i, i, 1.0, 0.0, 0.0);
+    
+    //toDraw
+    if (toDraw != nullptr) {
+        for (int i=0; i< toDraw->vertices->size(); ++i)
+        {
+            Vector4 temp = rasterizeVertex(toDraw->vertices->at(i)->toVector4(1));
+            drawPoint(*temp.ptr(), *(temp.ptr()+1), 1.0, 1.0, 1.0);
+        }
     }
+    
+
 }
 
 // Called whenever the window size changes
@@ -114,32 +128,19 @@ void Rasterizer::display()
     clearBuffer();
     rasterize();
     
-    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // glDrawPixels writes a block of pixels to the framebuffer
     glDrawPixels(window_width, window_height, GL_RGB, GL_FLOAT, pixels);
     
-    glutSwapBuffers();
-    
-    clearBuffer();
-    drawPoint(window_width, window_height, 0, 0, 0);
+    //glutSwapBuffers();
 }
 
-
 void Rasterizer::updateD(){
-    
-    d.set(window_width/2, 0, 0, 0,
-          0, window_height/2, 0, 0,
-          0, 0, 0.5, 0,
-          window_width/2, window_height/2, 0.5, 1);
+    d.makeViewport(0, window_width, 0, window_height);
 }
 
 void Rasterizer::updateP(){
-    double aspect = window_width/window_height;
-    p.set(1/(aspect*tan(FOV/2)), 0, 0, 0,
-          0, 1/tan(FOV/2), 0, 0,
-          0, 0, (near+far)/(near-far), -1,
-          0, 0, 2*near*far/(near-far), 0);
+    p.makePerspectiveProjection(FOV, window_width, window_height, near, far);
 }
 

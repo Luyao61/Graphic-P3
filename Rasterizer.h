@@ -11,16 +11,19 @@
 
 #include <stdio.h>
 #include "Matrix4.h"
+#include "Drawable.h"
 
 
-class Rasterizer{
+class Rasterizer : public Drawable{
 private:
 
 protected:
 
-Matrix4 d;   //Viewport Matrix
-Matrix4 p;  //Projection Matrix
 public:
+    Matrix4 d;   //Viewport Matrix
+    Matrix4 p;  //Projection Matrix
+
+    Drawable *toDraw;
 
     Rasterizer(void);
     ~Rasterizer(void);
@@ -35,6 +38,8 @@ public:
     void display();
     void updateD(void);
     void updateP(void);
+    
+    Vector4 rasterizeVertex(Vector4);
 
 
 };

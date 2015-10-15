@@ -250,86 +250,8 @@ std::vector<std::string> OBJObject::split(const std::string &s, char delim)
 
 
 
-void OBJObject::reset(){
-    toWorld.identity();
-    center.set(0, 0, 0, 1);
-}
-
-void OBJObject::orbit(float radians){
-    Matrix4 rotation;
-    rotation.makeRotateZ(radians);
-    
-    toWorld = rotation  * toWorld;
-    
-    center = rotation * center;
-}
-
-void OBJObject::moveX(){
-    Matrix4 move;
-    move = move.makeTranslate(0.5, 0, 0);
-    
-    toWorld = move * toWorld;
-    
-    center = move * center;
-}
-void OBJObject::movex(){
-    Matrix4 move;
-    move = move.makeTranslate(-0.5, 0, 0);
-    
-    toWorld = move * toWorld;
-    center = move * center;
-}
-
-void OBJObject::moveY(){
-    Matrix4 move;
-    move = move.makeTranslate(0, 0.5, 0);
-    
-    toWorld = move * toWorld;
-    center = move * center;
-}
-void OBJObject::movey(){
-    Matrix4 move;
-    move = move.makeTranslate(0, -0.5, 0);
-    
-    toWorld = move * toWorld;
-    center = move * center;
-    
-}
-void OBJObject::moveZ(){
-    Matrix4 move;
-    move = move.makeTranslate(0, 0, 0.5);
-    
-    toWorld = move * toWorld;
-    center = move * center;
-    
-}
-void OBJObject::movez(){
-    Matrix4 move;
-    move = move.makeTranslate(0, 0, -0.5);
-    
-    toWorld = move * toWorld;
-    center = move * center;
-}
 
 
-void OBJObject::scale(bool x){
-    Matrix4 scale;
-    if (x) {
-        scale.makeScale(1.01);
-    }
-    else{
-        scale.makeScale(0.99);
-    }
-    toWorld = toWorld * scale;
-}
-
-void OBJObject::spin(float radians)
-{
-    Matrix4 rotation;
-    rotation.makeRotateY(radians);
-    
-    toWorld = toWorld  * rotation;
-}
 
 
 
