@@ -18,17 +18,9 @@ public:
     virtual void draw(DrawData&);
     virtual void update(UpdateData&);
     
-    void spin(float);
-    void moveX();
-    void movex();
-    void movey();
-    void moveY();
-    void movez();
-    void moveZ();
-    void scale(bool);
-    void orbit(float);
+
     
-    void reset();
+    //void reset();
     
 };
 

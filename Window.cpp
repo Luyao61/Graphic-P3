@@ -189,7 +189,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         exit(0);
     }
     else if(key == 'x'){
-        if (drawCube == true) {
+        if (!useRasterizer && drawCube == true) {
             Globals::cube.movex();
         }
         else if(useRasterizer == true){
@@ -200,7 +200,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         }
     }
     else if(key == 'X'){
-        if (drawCube == true) {
+        if (!useRasterizer && drawCube == true) {
             Globals::cube.moveX();
         }
         else if(useRasterizer == true){
@@ -212,7 +212,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         }
     }
     else if(key == 'y'){
-        if (drawCube == true) {
+        if (!useRasterizer && drawCube == true) {
             Globals::cube.movey();
         }
         else if(useRasterizer == true){
@@ -223,7 +223,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         }
     }
     else if(key == 'Y'){
-        if (drawCube == true) {
+        if (!useRasterizer && drawCube == true) {
             Globals::cube.moveY();
         }
         else if(useRasterizer == true){
@@ -234,7 +234,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         }
     }
     else if(key == 'z'){
-        if (drawCube == true) {
+        if (!useRasterizer && drawCube == true) {
             Globals::cube.movez();
         }
         else if(useRasterizer == true){
@@ -245,7 +245,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         }
     }
     else if(key == 'Z'){
-        if (drawCube == true) {
+        if (!useRasterizer && drawCube == true) {
             Globals::cube.moveZ();
         }
         else if(useRasterizer == true){
@@ -256,7 +256,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         }
     }
     else if(key == 'o'){
-        if (drawCube == true) {
+        if (!useRasterizer && drawCube == true) {
             Globals::cube.orbit(orbitAngle);
         }
         else if(useRasterizer == true){
@@ -267,7 +267,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         }
     }
     else if(key == 'O'){
-        if (drawCube == true) {
+        if (!useRasterizer && drawCube == true) {
             Globals::cube.orbit(-orbitAngle);
         }
         else if(useRasterizer == true){
@@ -278,7 +278,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         }
     }
     else if(key == 's'){
-        if (drawCube == true) {
+        if (!useRasterizer && drawCube == true) {
             Globals::cube.scale(false);
         }
         else if(useRasterizer == true){
@@ -290,7 +290,7 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         }
     }
     else if(key == 'S'){
-        if (drawCube == true) {
+        if (!useRasterizer && drawCube == true) {
             Globals::cube.scale(true);
         }
         else if(useRasterizer == true){
@@ -321,7 +321,6 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
     }
     else if(key == 'e'){
         useRasterizer = !useRasterizer;
-
     }
     else if (key == '-' || key == '+'){
         Globals::rasterizer.keyboard(key, 0, 0);

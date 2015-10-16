@@ -23,9 +23,9 @@ Cube::Cube(float size) : Drawable()
         face->vertexIndices[0] = i*4;
         face->vertexIndices[1] = i*4+1;
         face->vertexIndices[2] = i*4+2;
-        face->normalIndices[0] = i;
-        face->normalIndices[1] = i;
-        face->normalIndices[2] = i;
+        face->normalIndices[0] = i*4;
+        face->normalIndices[1] = i*4+1;
+        face->normalIndices[2] = i*4+2;
         
         faces->push_back(face);
         
@@ -34,24 +34,49 @@ Cube::Cube(float size) : Drawable()
         face1->vertexIndices[0] = i*4+2;
         face1->vertexIndices[1] = i*4+3;
         face1->vertexIndices[2] = i*4;
-        face1->normalIndices[0] = i;
-        face1->normalIndices[1] = i;
-        face1->normalIndices[2] = i;
+        face1->normalIndices[0] = i*4+2;
+        face1->normalIndices[1] = i*4+3;
+        face1->normalIndices[2] = i*4;
         faces->push_back(face1);
     }
     
+    /*
     Vector3 vn1 = *new Vector3(0.0, 0.0, 1.0);
     Vector3 vn2 = *new Vector3(-1.0, 0.0, 0.0);
     Vector3 vn3 = *new Vector3(1.0, 0.0, 0.0);
     Vector3 vn4 = *new Vector3(0.0, 0.0, -1.0);
     Vector3 vn5 = *new Vector3(0.0, 1.0, 0.0);
     Vector3 vn6 = *new Vector3(0.0, -1.0, 0.0);
-    normals -> push_back(&vn1);
-    normals -> push_back(&vn2);
-    normals -> push_back(&vn3);
-    normals -> push_back(&vn4);
-    normals -> push_back(&vn5);
-    normals -> push_back(&vn6);
+    */
+    normals -> push_back(new Vector3(0.0, 0.0, 1.0));
+    normals -> push_back(new Vector3(0.0, 0.0, 1.0));
+    normals -> push_back(new Vector3(0.0, 0.0, 1.0));
+    normals -> push_back(new Vector3(0.0, 0.0, 1.0));
+
+    normals -> push_back(new Vector3(-1.0, 0.0, 0.0));
+    normals -> push_back(new Vector3(-1.0, 0.0, 0.0));
+    normals -> push_back(new Vector3(-1.0, 0.0, 0.0));
+    normals -> push_back(new Vector3(-1.0, 0.0, 0.0));
+
+    normals -> push_back(new Vector3(1.0, 0.0, 0.0));
+    normals -> push_back(new Vector3(1.0, 0.0, 0.0));
+    normals -> push_back(new Vector3(1.0, 0.0, 0.0));
+    normals -> push_back(new Vector3(1.0, 0.0, 0.0));
+
+    normals -> push_back(new Vector3(0.0, 0.0, -1.0));
+    normals -> push_back(new Vector3(0.0, 0.0, -1.0));
+    normals -> push_back(new Vector3(0.0, 0.0, -1.0));
+    normals -> push_back(new Vector3(0.0, 0.0, -1.0));
+
+    normals -> push_back(new Vector3(0.0, 1.0, 0.0));
+    normals -> push_back(new Vector3(0.0, 1.0, 0.0));
+    normals -> push_back(new Vector3(0.0, 1.0, 0.0));
+    normals -> push_back(new Vector3(0.0, 1.0, 0.0));
+
+    normals -> push_back(new Vector3(0.0, -1.0, 0.0));
+    normals -> push_back(new Vector3(0.0, -1.0, 0.0));
+    normals -> push_back(new Vector3(0.0, -1.0, 0.0));
+    normals -> push_back(new Vector3(0.0, -1.0, 0.0));
     
     vertices -> push_back(new Vector3(-halfSize,  halfSize,  halfSize));
     vertices -> push_back(new Vector3(halfSize,  halfSize,  halfSize));
@@ -167,12 +192,8 @@ void Cube::draw(DrawData& data)
     
 }
 
-void Cube::reset(){
-    toWorld.identity();
-    center.set(0, 0, 0, 1);
-    center.toVector3().print("Cube New Position");
-}
-//////
+
+
 
 void Cube::update(UpdateData& data)
 {
@@ -180,89 +201,3 @@ void Cube::update(UpdateData& data)
 }
 
 //self Centered!;
-void Cube::spin(float radians)
-{
-    Matrix4 rotation;
-    rotation.makeRotateY(radians);
-    
-    toWorld = toWorld  * rotation;
-}
-void Cube::orbit(float radians){
-    Matrix4 rotation;
-    rotation.makeRotateZ(radians);
-    
-    toWorld = rotation  * toWorld;
-    
-    center = rotation * center;
-    center.toVector3().print("Cube New Position");
-
-}
-
-void Cube::moveX(){
-    Matrix4 move;
-    move = move.makeTranslate(0.5, 0, 0);
-    
-    toWorld = move * toWorld;
-    
-    center = move * center;
-    center.toVector3().print("Cube New Position");
-
-}
-void Cube::movex(){
-    Matrix4 move;
-    move = move.makeTranslate(-0.5, 0, 0);
-    
-    toWorld = move * toWorld;
-    center = move * center;
-    center.toVector3().print("Cube New Position");
-
-}
-
-void Cube::moveY(){
-    Matrix4 move;
-    move = move.makeTranslate(0, 0.5, 0);
-    
-    toWorld = move * toWorld;
-    center = move * center;
-    center.toVector3().print("Cube New Position");
-
-}
-void Cube::movey(){
-    Matrix4 move;
-    move = move.makeTranslate(0, -0.5, 0);
-    
-    toWorld = move * toWorld;
-    center = move * center;
-    center.toVector3().print("Cube New Position");
-}
-void Cube::moveZ(){
-    Matrix4 move;
-    move = move.makeTranslate(0, 0, 0.5);
-    
-    toWorld = move * toWorld;
-    center = move * center;
-    center.toVector3().print("Cube New Position");
-
-}
-void Cube::movez(){
-    Matrix4 move;
-    move = move.makeTranslate(0, 0, -0.5);
-    
-    toWorld = move * toWorld;
-    center = move * center;
-    center.toVector3().print("Cube New Position");
-}
-
-
-void Cube::scale(bool x){
-    Matrix4 scale;
-    if (x) {
-        scale.makeScale(1.01);
-    }
-    else{
-        scale.makeScale(0.99);
-    }
-    toWorld = toWorld * scale;
-    center.toVector3().print("Cube New Position");
-}
-

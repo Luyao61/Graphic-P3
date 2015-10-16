@@ -218,7 +218,10 @@ void Rasterizer::rasterizeTriangle()
                                 cameraPos = cameraPos.normalize();
                                 lightPos = lightPos.normalize();
                                 Vector3 h;
-                                h = cameraPos.add(lightPos);
+                                
+                                
+                                h =
+                                cameraPos.add(lightPos);
                                 h = h.multiply(h.magnitude());
                                 
                                 Vector3 normalA, normalB, normalC;
@@ -301,9 +304,10 @@ void Rasterizer::reshape(int new_width, int new_height)
     window_height = new_height;
     delete[] pixels;
     pixels = new float[window_width * window_height * 3];
+    delete[] zbuffer;
+    zbuffer = new float[window_height*window_width];
     updateD();
     updateP();
-    zbuffer = new float[window_height*window_width];
 }
 
 void Rasterizer::keyboard(unsigned char key, int, int)
@@ -322,7 +326,6 @@ void Rasterizer::keyboard(unsigned char key, int, int)
     }
     else if(key == 'd'){
         debugMode = !debugMode;
-        //std::cout <<"DEBUG MODE: "<< debugMode<<std::endl;
     }
     else if(key == GLUT_KEY_F1 || key == GLUT_KEY_F2
             || key == GLUT_KEY_F3 || key == GLUT_KEY_F4
@@ -349,7 +352,7 @@ void Rasterizer::display()
     clearBuffer();
     rasterize();
     
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // glDrawPixels writes a block of pixels to the framebuffer
     glDrawPixels(window_width, window_height, GL_RGB, GL_FLOAT, pixels);
