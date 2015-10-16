@@ -23,9 +23,9 @@ Cube::Cube(float size) : Drawable()
         face->vertexIndices[0] = i*4;
         face->vertexIndices[1] = i*4+1;
         face->vertexIndices[2] = i*4+2;
-        face->normalIndices[0] = i;
-        face->normalIndices[1] = i;
-        face->normalIndices[2] = i;
+        face->normalIndices[0] = i*4;
+        face->normalIndices[1] = i*4+1;
+        face->normalIndices[2] = i*4+2;
         
         faces->push_back(face);
         
@@ -34,9 +34,9 @@ Cube::Cube(float size) : Drawable()
         face1->vertexIndices[0] = i*4+2;
         face1->vertexIndices[1] = i*4+3;
         face1->vertexIndices[2] = i*4;
-        face1->normalIndices[0] = i;
-        face1->normalIndices[1] = i;
-        face1->normalIndices[2] = i;
+        face1->normalIndices[0] = i*4+2;
+        face1->normalIndices[1] = i*4+3;
+        face1->normalIndices[2] = i*4;
         faces->push_back(face1);
     }
     
@@ -46,12 +46,30 @@ Cube::Cube(float size) : Drawable()
     Vector3 vn4 = *new Vector3(0.0, 0.0, -1.0);
     Vector3 vn5 = *new Vector3(0.0, 1.0, 0.0);
     Vector3 vn6 = *new Vector3(0.0, -1.0, 0.0);
-    normals -> push_back(&vn1);
-    normals -> push_back(&vn2);
-    normals -> push_back(&vn3);
-    normals -> push_back(&vn4);
-    normals -> push_back(&vn5);
-    normals -> push_back(&vn6);
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
+    normals -> push_back(new Vector3(rand(),rand(),rand()));
     
     vertices -> push_back(new Vector3(-halfSize,  halfSize,  halfSize));
     vertices -> push_back(new Vector3(halfSize,  halfSize,  halfSize));

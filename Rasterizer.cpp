@@ -210,16 +210,42 @@ void Rasterizer::rasterizeTriangle()
                                 }
                             }
                             else if (renderMode == 4){ //EXTRA CREDIT
-                                float rr, gg, bb;
                                 //colorP3.at(i);
                                 
                                 Vector3 cameraPos = Globals::camera.e;
                                 Vector3 lightPos = Globals::light.position.toVector3();
-                                cameraPos = cameraPos.normalize();
-                                lightPos = lightPos.normalize();
-                                Vector3 h;
-                                h = cameraPos.add(lightPos);
-                                h = h.multiply(h.magnitude());
+                                
+                                Vector3 cameraPos_a = cameraPos - a;
+                                Vector3 lightPos_a = lightPos - a;
+                                
+                                Vector3 cameraPos_b = cameraPos - b;
+                                Vector3 lightPos_b = lightPos - b;
+                                
+                                Vector3 cameraPos_c = cameraPos - c;
+                                Vector3 lightPos_c = lightPos - c;
+                                
+                                
+                                cameraPos_a = cameraPos_a.normalize();
+                                lightPos_a = lightPos_a.normalize();
+
+                                
+                                cameraPos_b = cameraPos_b.normalize();
+                                lightPos_b = lightPos_b.normalize();
+
+                                
+                                cameraPos_c = cameraPos_c.normalize();
+                                lightPos_c = lightPos_c.normalize();
+
+                                Vector3 h_a, h_b, h_c;
+                                
+                                h_a = cameraPos_a.add(lightPos_a);
+                                h_a = h_a.multiply(1/h_a.magnitude());
+                                
+                                h_b = cameraPos_b.add(lightPos_b);
+                                h_b = h_b.multiply(1/h_b.magnitude());
+                                
+                                h_c = cameraPos_c.add(lightPos_c);
+                                h_c = h_c.multiply(1/h_c.magnitude());
                                 
                                 Vector3 normalA, normalB, normalC;
                                 if(normals -> size() != 0){
@@ -231,21 +257,91 @@ void Rasterizer::rasterizeTriangle()
                                     normalC = normalC.normalize();
                                 }
                                 
+                                /*
                                 Vector3 specular;
                                 specular.set(*Globals::light.specularColor.ptr(),
                                              *(Globals::light.specularColor.ptr()+1),
                                              *(Globals::light.specularColor.ptr()+2));
                                 
-                                drawPoint(m, n, rr, gg, bb);
+                                Vector3 diffuse;
+                                diffuse.set(*Globals::light.diffuseColor.ptr(),
+                                             *(Globals::light.diffuseColor.ptr()+1),
+                                             *(Globals::light.diffuseColor.ptr()+2));
                                 
-                                //Globals::light.ambientColor = *new Color(1,1,1);
-                                //Globals::light.diffuseColor = *new Color(1,1,1);
-                                //Globals::light.specularColor = *new Color(1,1,1);
-
-
-
+                                */
+                                Vector3 specular = *new Vector3(1,1,1);
+                                Vector3 diffuse = *new Vector3(1,1,1);
+                                
+                                Vector3 original_Color;
+                                original_Color.set(*colorP3->at(i)->ptr(), *(colorP3->at(i)->ptr()+1), *(colorP3->at(i)->ptr()+2));
+                                
+                                Vector3 white, zero;
+                                white.set(1,1,1);
+                                zero.set(0,0,0);
                                 
                                 
+                                Vector3 newColor_A, newColor_B, newColor_C;
+                                if (normalA.dot(lightPos_a) < 0) {
+                                    newColor_A = diffuse.multiply(0)*original_Color;
+                                }else{
+                                    newColor_A = diffuse.multiply(normalA.dot(lightPos_a))*original_Color;
+                                }
+                                
+                                if (normalA.dot(h_a) < 0) {
+                                    newColor_A = newColor_A + diffuse.multiply(0)*original_Color;
+                                }else{
+                                    newColor_A = newColor_A + diffuse.multiply(pow(normalA.dot(h_a),10))*original_Color;
+                                }
+                                
+
+                                if (normalB.dot(lightPos_b) < 0) {
+                                    newColor_B = diffuse.multiply(0)*original_Color;
+                                }else{
+                                    newColor_B = diffuse.multiply(normalB.dot(lightPos_b))*original_Color;
+                                }
+                                
+                                if (normalB.dot(h_b) < 0) {
+                                    newColor_B = newColor_B + diffuse.multiply(0)*original_Color;
+                                }else{
+                                    newColor_B = newColor_B + diffuse.multiply(pow(normalB.dot(h_b),10))*original_Color;
+                                }
+                                
+                                
+                                if (normalC.dot(lightPos_c) < 0) {
+                                    newColor_C = diffuse.multiply(0)*original_Color;
+                                }else{
+                                    newColor_C = diffuse.multiply(normalC.dot(lightPos_c))*original_Color;
+                                }
+                                
+                                if (normalC.dot(h_c) < 0) {
+                                    newColor_C = newColor_C + diffuse.multiply(0)*original_Color;
+                                }else{
+                                    newColor_C = newColor_C + diffuse.multiply(pow(normalC.dot(h_c),10))*original_Color;
+                                }
+
+                                
+                                newColor_A = newColor_A.normalize();
+                                newColor_B = newColor_B.normalize();
+                                newColor_C = newColor_C.normalize();
+                                newColor_A = newColor_A*0.5 + *new Vector3(0.5,0.5,0.5);
+                                newColor_B = newColor_B*0.5 + *new Vector3(0.5,0.5,0.5);
+                                newColor_C = newColor_C*0.5 + *new Vector3(0.5,0.5,0.5);
+                                
+                                nAx = *newColor_A.ptr();
+                                nBx = *newColor_B.ptr();
+                                nCx = *newColor_C.ptr();
+                                nAy = *(newColor_A.ptr()+1);
+                                nBy = *(newColor_B.ptr()+1);
+                                nCy = *(newColor_C.ptr()+1);
+                                nAz = *(newColor_A.ptr()+2);
+                                nBz = *(newColor_B.ptr()+2);
+                                nCz = *(newColor_C.ptr()+2);
+                                
+                                float r =(1-u-v) * nAx + v * nBx + u * nCx;
+                                float g =(1-u-v) * nAy + v * nBy + u * nCy;
+                                float b =(1-u-v) * nAz + v * nBz + u * nCz;
+                                
+                                drawPoint(m, n, r, g, b);
                             }
                         }
                     }
@@ -349,7 +445,7 @@ void Rasterizer::display()
     clearBuffer();
     rasterize();
     
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // glDrawPixels writes a block of pixels to the framebuffer
     glDrawPixels(window_width, window_height, GL_RGB, GL_FLOAT, pixels);

@@ -86,12 +86,12 @@ House::House(void) : Drawable()
         Vector3 c = *new Vector3(houseVertices[face->vertexIndices[2]*3],houseVertices[face->vertexIndices[2]*3+1],houseVertices[face->vertexIndices[2]*3+2]);
 
         Vector3 na =(b-a).cross(c-a);
-        Vector3 nb =(a-b).cross(c-b);
+        Vector3 nb =(c-b).cross(a-b);
         Vector3 nc =(a-c).cross(b-c);
 
-        normals->push_back(&na);
-        normals->push_back(&nb);
-        normals->push_back(&nc);
+        normals->push_back(new Vector3(rand(),rand(),rand()));
+        normals->push_back(new Vector3(rand(),rand(),rand()));
+        normals->push_back(new Vector3(rand(),rand(),rand()));
         
         face->normalIndices[0] = i;
         face->normalIndices[1] = i+1;
@@ -103,7 +103,7 @@ House::House(void) : Drawable()
         vertices->push_back(new Vector3(houseVertices[i*3],houseVertices[i*3+1],houseVertices[i*3+2]));
     }
     
-    std::cout<< "HOUSE Done parsing." << std::endl;
+    //std::cout<< "HOUSE Done parsing." << std::endl;
 }
 
 House::~House(void)
