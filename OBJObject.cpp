@@ -122,10 +122,6 @@ void OBJObject::draw(DrawData& data)
         
     }
 
-    
-    
-    
-    
     glEnd();
     
     glPopMatrix();

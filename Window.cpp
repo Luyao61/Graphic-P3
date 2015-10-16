@@ -68,11 +68,17 @@ void Window::idleCallback()
     //Set up a static time delta for update calls
     Globals::updateData.dt = 1.0/60.0;// 60 fps
     if(drawCube == true){
+        if (useRasterizer) {
+            Globals::rasterizer.spin(spinAngle);
+        
+        }else{
     //Rotate cube; if it spins too fast try smaller values and vice versa
-    Globals::cube.spin(spinAngle);
+            Globals::cube.spin(spinAngle);
     //Call the update function on cube
-    Globals::cube.update(Globals::updateData);
+            Globals::cube.update(Globals::updateData);
+        }
     }
+
     
     if (drawSphere == true) {
         Globals::sphere.move();
@@ -159,9 +165,6 @@ void Window::displayCallback()
         }
     }
     
-    
-     
-
     
     //Pop off the changes we made to the matrix stack this frame
     glPopMatrix();
@@ -309,23 +312,21 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         Globals::rasterizer.reset();
     }
     else if (key == 'b'){
-        if (useRasterizer) {
-            Globals::rasterizer.keyboard(key, 0, 0);
+        drawSphere = true;
+        drawCube = false;
+        drawHouse = false;
+        drawBear = drawBunny = drawDragon = false;
 
-        }else{
-            drawSphere = true;
-            drawCube = false;
-            drawHouse = false;
-            drawBear = drawBunny = drawDragon = false;
-
-            Globals::sphere.reset();
-        }
+        Globals::sphere.reset();
     }
     else if(key == 'e'){
         useRasterizer = !useRasterizer;
 
     }
     else if (key == '-' || key == '+'){
+        Globals::rasterizer.keyboard(key, 0, 0);
+    }
+    else if(key == 'd'){
         Globals::rasterizer.keyboard(key, 0, 0);
     }
 }
@@ -343,7 +344,8 @@ void Window::processSpecialKeys(int key, int x, int y) {
             drawHouse = false;
             
             allOBJ->clear();
-
+            Globals::rasterizer.toDraw = &Globals::cube;
+            Globals::rasterizer.keyboard(key, 0, 0);
         Globals::camera.reset();
 		break;
 	case GLUT_KEY_F2:
@@ -357,6 +359,7 @@ void Window::processSpecialKeys(int key, int x, int y) {
 
 		Globals::camera.set(e, d, up);
             Globals::rasterizer.toDraw = &Globals::house;
+            Globals::rasterizer.keyboard(key, 0, 0);
             
             allOBJ->clear();
 
@@ -373,6 +376,7 @@ void Window::processSpecialKeys(int key, int x, int y) {
             
         Globals::camera.set(e, d, up);
             Globals::rasterizer.toDraw = &Globals::house;
+            Globals::rasterizer.keyboard(key, 0, 0);
 
             
             allOBJ->clear();
@@ -387,6 +391,7 @@ void Window::processSpecialKeys(int key, int x, int y) {
             Globals::camera.reset();
             
             Globals::rasterizer.toDraw = new OBJObject(Globals::bunny);
+            Globals::rasterizer.keyboard(key, 0, 0);
             
             allOBJ->push_back(new OBJObject(Globals::bunny));
             break;
@@ -399,6 +404,7 @@ void Window::processSpecialKeys(int key, int x, int y) {
             
             Globals::camera.reset();
             Globals::rasterizer.toDraw = new OBJObject(Globals::bear);
+            Globals::rasterizer.keyboard(key, 0, 0);
 
             
             allOBJ->push_back(new OBJObject(Globals::bear));
@@ -411,6 +417,7 @@ void Window::processSpecialKeys(int key, int x, int y) {
 
             Globals::camera.reset();
             Globals::rasterizer.toDraw = new OBJObject(Globals::dragon);
+            Globals::rasterizer.keyboard(key, 0, 0);
             
             allOBJ->push_back(new OBJObject(Globals::dragon));
             break;

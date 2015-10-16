@@ -137,13 +137,13 @@ void Rasterizer::rasterizeTriangle()
         if (minX<0) {
             minX = 0;
         }
-        else if (maxX > window_width) {
+        if (maxX > window_width) {
             maxX = window_width - 1;
         }
         if (minY<0) {
             minY = 0;
         }
-        else if (maxY > window_width) {
+        if (maxY > window_width) {
             maxY = window_width - 1;
         }
         if (colorP3isEmpty){
@@ -153,7 +153,6 @@ void Rasterizer::rasterizeTriangle()
         for (int m = minX; m<=maxX; m++) {
             for ( int n = minY; n<=maxY; n++) {
                 
-
                 float v0x = cx-ax;
                 float v0y = cy-ay;
                 float v1x = bx-ax;
@@ -174,7 +173,7 @@ void Rasterizer::rasterizeTriangle()
                 if ( (u >= 0) && (v >= 0) && (u + v <= 1) ) {
                     if(renderMode == 1){
                         drawPoint(m, n, *colorP3->at(i)->ptr(), *(colorP3->at(i)->ptr()+1), *(colorP3->at(i)->ptr()+2));
-                    }else if(renderMode==2 || renderMode == 3){
+                    }else if(renderMode==2 || renderMode == 3 || renderMode == 4){
                         if (z<zbuffer[m+n*window_width] && z>0) {
                             if (renderMode == 2) {
                                 drawPoint(m, n, *colorP3->at(i)->ptr(), *(colorP3->at(i)->ptr()+1), *(colorP3->at(i)->ptr()+2));
@@ -210,6 +209,44 @@ void Rasterizer::rasterizeTriangle()
                                     zbuffer[m+n*window_width] = z;
                                 }
                             }
+                            else if (renderMode == 4){ //EXTRA CREDIT
+                                float rr, gg, bb;
+                                //colorP3.at(i);
+                                
+                                Vector3 cameraPos = Globals::camera.e;
+                                Vector3 lightPos = Globals::light.position.toVector3();
+                                cameraPos = cameraPos.normalize();
+                                lightPos = lightPos.normalize();
+                                Vector3 h;
+                                h = cameraPos.add(lightPos);
+                                h = h.multiply(h.magnitude());
+                                
+                                Vector3 normalA, normalB, normalC;
+                                if(normals -> size() != 0){
+                                    normalA = *normals -> at(faces->at(i)->normalIndices[0]);
+                                    normalB = *normals -> at(faces->at(i)->normalIndices[1]);
+                                    normalC = *normals -> at(faces->at(i)->normalIndices[2]);
+                                    normalA = normalA.normalize();
+                                    normalB = normalB.normalize();
+                                    normalC = normalC.normalize();
+                                }
+                                
+                                Vector3 specular;
+                                specular.set(*Globals::light.specularColor.ptr(),
+                                             *(Globals::light.specularColor.ptr()+1),
+                                             *(Globals::light.specularColor.ptr()+2));
+                                
+                                drawPoint(m, n, rr, gg, bb);
+                                
+                                //Globals::light.ambientColor = *new Color(1,1,1);
+                                //Globals::light.diffuseColor = *new Color(1,1,1);
+                                //Globals::light.specularColor = *new Color(1,1,1);
+
+
+
+                                
+                                
+                            }
                         }
                     }
                 }
@@ -236,7 +273,7 @@ void Rasterizer::rasterize()
     
     // example: draw diagonal line:
     
-    //toDraw
+
     if (toDraw != nullptr) {
         this->vertices = toDraw->vertices;
         this->normals = toDraw->normals;
@@ -244,20 +281,17 @@ void Rasterizer::rasterize()
         this->colors = toDraw->colors;
         
         if (renderMode == 0) {
-            for (int i=0; i< toDraw->vertices->size(); ++i)
+            for (int i=0; i< this->vertices->size(); ++i)
             {
                 Vector4 temp = rasterizeVertex(toDraw->vertices->at(i)->toVector4(1));
                 drawPoint(*temp.ptr(), *(temp.ptr()+1), 1.0, 1.0, 1.0);
             }
         }
-        else if(renderMode == 1 || renderMode == 2 || renderMode ==3){
+        else if(renderMode == 1 || renderMode == 2 || renderMode ==3 || renderMode == 4){
             //TODO::
             rasterizeTriangle();
         }
-
     }
-    
-
 }
 
 // Called whenever the window size changes
@@ -282,13 +316,31 @@ void Rasterizer::keyboard(unsigned char key, int, int)
     }
     else if (key == '+'){
         renderMode++;
-        if (renderMode > 3) {
-            renderMode = 3;
+        if (renderMode > 4) {
+            renderMode = 4;
         }
     }
-    else if(key == 'b'){
+    else if(key == 'd'){
         debugMode = !debugMode;
-        std::cout <<"DEBUG MODE: "<< debugMode<<std::endl;
+        //std::cout <<"DEBUG MODE: "<< debugMode<<std::endl;
+    }
+    else if(key == GLUT_KEY_F1 || key == GLUT_KEY_F2
+            || key == GLUT_KEY_F3 || key == GLUT_KEY_F4
+            || key == GLUT_KEY_F5 || key == GLUT_KEY_F6){
+        
+        this->vertices = new std::vector<Vector3*>();
+        this->normals = new std::vector<Vector3*>();
+        this->faces = new std::vector<Face*>();
+        this->colors = new std::vector<Vector3*>();
+
+        this->vertices = toDraw->vertices;
+        this->normals = toDraw->normals;
+        this->faces = toDraw->faces;
+        this->colors = toDraw->colors;
+        
+        colorP3isEmpty = true;
+        this->colorP3 = new std::vector<Color*>();
+        this->reset();
     }
 }
 
