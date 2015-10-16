@@ -27,6 +27,8 @@ public:
     std::vector<Vector3*>* normals;
     std::vector<Face*>* faces;
     std::vector<Vector3*>* colors;
+    
+    std::vector<Color*>* colorP3;  //added color for Project3, random color
     Vector4 center;
     int renderMode;
 

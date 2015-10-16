@@ -309,12 +309,17 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         Globals::rasterizer.reset();
     }
     else if (key == 'b'){
-        drawSphere = true;
-        drawCube = false;
-        drawHouse = false;
-		drawBear = drawBunny = drawDragon = false;
+        if (useRasterizer) {
+            Globals::rasterizer.keyboard(key, 0, 0);
 
-        Globals::sphere.reset();
+        }else{
+            drawSphere = true;
+            drawCube = false;
+            drawHouse = false;
+            drawBear = drawBunny = drawDragon = false;
+
+            Globals::sphere.reset();
+        }
     }
     else if(key == 'e'){
         useRasterizer = !useRasterizer;

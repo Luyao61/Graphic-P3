@@ -29,6 +29,9 @@ static float far = 1000.0;
 Drawable *toDraw;
 float *zbuffer = new float[window_width * window_height];
 
+bool colorP3isEmpty = true;
+bool debugMode = false;
+
 using namespace std;
 
 Rasterizer::Rasterizer() : Drawable(){
@@ -135,19 +138,21 @@ void Rasterizer::rasterizeTriangle()
             minX = 0;
         }
         else if (maxX > window_width) {
-            maxX = window_width;
+            maxX = window_width - 1;
         }
         if (minY<0) {
             minY = 0;
         }
         else if (maxY > window_width) {
-            maxY = window_width;
+            maxY = window_width - 1;
         }
-        Color randomColor = *new Color();
-        randomColor = randomColor.randomPastel();
+        if (colorP3isEmpty){
+            colorP3->push_back(new Color((rand()%256)/(float)256,(rand()%256)/(float)256,(rand()%256)/(float)256));
+        }
         
         for (int m = minX; m<=maxX; m++) {
             for ( int n = minY; n<=maxY; n++) {
+                
 
                 float v0x = cx-ax;
                 float v0y = cy-ay;
@@ -168,11 +173,11 @@ void Rasterizer::rasterizeTriangle()
 
                 if ( (u >= 0) && (v >= 0) && (u + v <= 1) ) {
                     if(renderMode == 1){
-                        drawPoint(m, n, *randomColor.ptr(), *(randomColor.ptr()+1), *(randomColor.ptr()+2));
+                        drawPoint(m, n, *colorP3->at(i)->ptr(), *(colorP3->at(i)->ptr()+1), *(colorP3->at(i)->ptr()+2));
                     }else if(renderMode==2 || renderMode == 3){
                         if (z<zbuffer[m+n*window_width] && z>0) {
                             if (renderMode == 2) {
-                                drawPoint(m, n, *randomColor.ptr(), *(randomColor.ptr()+1), *(randomColor.ptr()+2));
+                                drawPoint(m, n, *colorP3->at(i)->ptr(), *(colorP3->at(i)->ptr()+1), *(colorP3->at(i)->ptr()+2));
                                 zbuffer[m+n*window_width] = z;
                             }
                             else if(renderMode == 3){
@@ -185,7 +190,7 @@ void Rasterizer::rasterizeTriangle()
                                     normalC = normalC.normalize();
                                     normalA = normalA*0.5 + *new Vector3(0.5,0.5,0.5);
                                     normalB = normalB*0.5 + *new Vector3(0.5,0.5,0.5);
-                                    normalB = normalB*0.5 + *new Vector3(0.5,0.5,0.5);
+                                    normalC = normalC*0.5 + *new Vector3(0.5,0.5,0.5);
                                     
                                     nAx = *normalA.ptr();
                                     nBx = *normalB.ptr();
@@ -208,13 +213,20 @@ void Rasterizer::rasterizeTriangle()
                         }
                     }
                 }
+                if (debugMode) {
+                    //debug mode;
+                    if (m == minX || m == maxX || n == minY || n == maxY) {
+                        Color colorRed = *new Color(0xff0000ff);
+                        drawPoint(m, n, *colorRed.ptr(), *(colorRed.ptr()+1), *(colorRed.ptr()+2));
+                    }
+
+                }
             }
         }
 
 
     }
-    
-    
+    colorP3isEmpty = false;
 }
 
 void Rasterizer::rasterize()
@@ -273,6 +285,10 @@ void Rasterizer::keyboard(unsigned char key, int, int)
         if (renderMode > 3) {
             renderMode = 3;
         }
+    }
+    else if(key == 'b'){
+        debugMode = !debugMode;
+        std::cout <<"DEBUG MODE: "<< debugMode<<std::endl;
     }
 }
 

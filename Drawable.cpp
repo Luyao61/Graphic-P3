@@ -11,6 +11,10 @@ Drawable::Drawable()
     this->normals = new std::vector<Vector3*>();
     this->faces = new std::vector<Face*>();
     this->colors = new std::vector<Vector3*>();
+    
+    //added for project 3
+    this->colorP3 = new std::vector<Color*>();
+    
 }
 
 Drawable::~Drawable()
@@ -108,10 +112,10 @@ void Drawable::movez(){
 void Drawable::scale(bool x){
     Matrix4 scale;
     if (x) {
-        scale.makeScale(1.01);
+        scale.makeScale(1.1);
     }
     else{
-        scale.makeScale(0.99);
+        scale.makeScale(0.9);
     }
     toWorld = toWorld * scale;
     center.print("Drawable New Position");
